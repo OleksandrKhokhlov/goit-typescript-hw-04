@@ -6,18 +6,29 @@ type Menu = { id: MenuIds; title: string };
 
 // Додати тип Menu Selected
 
+type SelectedMenu = {
+  id?: MenuIds;
+};
+
+type MenuSelected = {
+  selectedMenu: SelectedMenu;
+};
+
 const MenuSelectedContext = createContext<MenuSelected>({
   selectedMenu: {},
 });
 
 // Додайте тип MenuAction
+type MenuAction = {
+  onSelectedMenu: (MenuSelected: SelectedMenu) => void;
+};
 
 const MenuActionContext = createContext<MenuAction>({
   onSelectedMenu: noop,
 });
 
 type PropsProvider = {
-  children; // Додати тип для children
+  children: React.ReactElement; // Додати тип для children
 };
 
 function MenuProvider({ children }: PropsProvider) {
@@ -48,7 +59,7 @@ function MenuProvider({ children }: PropsProvider) {
 }
 
 type PropsMenu = {
-  menus; // Додайте вірний тип для меню
+  menus: Menu[]; // Додайте вірний тип для меню
 };
 
 function MenuComponent({ menus }: PropsMenu) {
@@ -57,7 +68,7 @@ function MenuComponent({ menus }: PropsMenu) {
 
   return (
     <>
-      {menus.map((menu) => (
+      {menus.map((menu: Menu) => (
         <div key={menu.id} onClick={() => onSelectedMenu({ id: menu.id })}>
           {menu.title}{" "}
           {selectedMenu.id === menu.id ? "Selected" : "Not selected"}
